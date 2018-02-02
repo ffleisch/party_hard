@@ -1,0 +1,23 @@
+//cool as fuck audio visualizer with loads of leds
+
+c++ vlt. python
+
+
+audio:
+	-loopback recording to capture sound
+		-WASAPI
+		-pythonAudio https://github.com/bastibe/SoundCard
+			-http://bastibe.de/2017-07-10-audio-apis-wasapi.html
+
+
+ftt and shit:
+	-fast fourier transform
+		-
+		
+
+arduino:
+	-pwm pins
+	-mosfets
+	
+lights:
+	-still open
