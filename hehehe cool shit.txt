@@ -6,6 +6,11 @@ c++ vlt. python
 audio:
 	-loopback recording to capture sound
 		-WASAPI
+			DIY:
+			-erstmal immdevice
+			-get IAudioClient
+			-det iaudiocaptureclient
+			
 		-pythonAudio https://github.com/bastibe/SoundCard
 			-http://bastibe.de/2017-07-10-audio-apis-wasapi.html
 
