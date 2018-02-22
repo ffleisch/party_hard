@@ -44,7 +44,7 @@ void capture::getSnippet(snippet * out)
 
 	int total = 0;
 	BYTE* t;
-	while (total < out->fnum) {
+	while (total < out->samples) {
 
 
 		//do {
