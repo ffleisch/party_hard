@@ -28,7 +28,7 @@ public:
 	void getCol2(int* out,int* ind);
 	float havg[3] = { 0,0,0 };
 	float havg2[3] = {0,0,0};
-	float rgb[3];
+	float rgb[3] = { 0,0,0 };
 
 
 	snippet(int minSize, WAVEFORMATEXTENSIBLE* wformat);

@@ -107,9 +107,9 @@ void flM(float inV,float* out,float fNum) {
 
 void snippet::getCol1(int* out,int* ind)
 {
-	float c[3] = {200,200,200};
-	float g1 = 440;
-	float g2 = 3000;
+	float c[3] = {150,150,150};
+	float g1 = 1320;
+	float g2 = 5000;
 	
 	int f1 = (g1/format->Format.nSamplesPerSec)*samples;
 	int f2 = (g2 / format->Format.nSamplesPerSec)*samples;
@@ -120,18 +120,19 @@ void snippet::getCol1(int* out,int* ind)
 	float num[3];
 	num[0]=fSum(freq[0],f1)/(f1);
 	num[1]=fSum(freq[0]+f1,f2-f1)/(f2 - f1);
-	num[2]=fSum(freq[0]+f2,samples-f2)/(samples-f2);
+	num[2]=fSum(freq[0]+f2,(samples/2)-f2)/((samples/2)-f2);
 
 	for (int i = 0;i < 3;i++) {
-		flM(num[i], &havg[i], 1 / 100.f);
+		flM(num[i], &havg[i], 0.01);
 		
 		float s = pow(havg[i] - num[i], 2);
 		flM(s, &havg2[i], 0.01);
 
-		//flM(c[i]*(sqrt(s)/havg[i]),&rgb[i],0.4);
-		flM(c[i] *(num[i]/havg[i]),&rgb[i],0.5 );
+		flM(c[i]*(sqrt(s)/havg[i]),&rgb[i],0.08);
+		//flM(c[i] *(sqrt(s)/),&rgb[i],0.1 );
 		if (rgb[i] > 255)rgb[i] = 255;
-		out[i] = rgb[i];
+		float gpf = 0.7;//geheimer pop-faktor
+		out[i] = (int)(pow((rgb[i]/255.f),gpf)*255);
 	}
 }
 
@@ -156,7 +157,7 @@ void snippet::getCol2(int * out,int* ind)
 	for (int i = 0;i < 3;i++) {
 
 		
-		flM(c *(sqrt(s)/havg2[0]), &rgb[i], 0.3);
+		flM(c *(sqrt(s)/havg2[0]), &rgb[i], 0.07);
 
 		if (rgb[i] > 255)rgb[i] = 255;
 		out[i] = rgb[i];
