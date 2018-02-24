@@ -13,12 +13,19 @@ audio:
 			
 		-pythonAudio https://github.com/bastibe/SoundCard
 			-http://bastibe.de/2017-07-10-audio-apis-wasapi.html
+	-fork einen zweig der mit opencv geilen shit macht
+		-hsv raum zu ton drehen lassen
+		-konzentrische kreise nach aussen
+	-einen anderen zweig zum kombinieren mit projekt julia4d 
+		-ooooooohhhhhh boi wird das geil
 
+Vielleicht alle Funktionen des programms in einem großen projekt zusammenfassen
+	- pssst:vieleicht veröffentlichen?
 
 ftt and shit:
 	-fast fourier transform
-		-
-		
+		-kissfft rocks
+	-ALLLL DONE
 
 arduino:
 	-pwm pins
@@ -26,3 +33,5 @@ arduino:
 	
 lights:
 	-still open
+	-meanwell  ldd h buck driver
+	-ldd 3 driver boar

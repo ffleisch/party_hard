@@ -26,9 +26,9 @@ public:
 	void transform();
 	void getCol1(int* out,int* ind);
 	void getCol2(int* out,int* ind);
-	float havg[3] = { 0,0,0 };
-	float havg2[3] = {0,0,0};
-	float rgb[3] = { 0,0,0 };
+	float havg[3];
+	float havg2[3];
+	float rgb[3];
 
 
 	snippet(int minSize, WAVEFORMATEXTENSIBLE* wformat);

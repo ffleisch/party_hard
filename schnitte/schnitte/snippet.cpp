@@ -36,6 +36,13 @@ snippet::snippet(int samnum,WAVEFORMATEXTENSIBLE* wformat)
 		sdata[i] = new kiss_fft_cpx[samples];
 		freq[i] = new kiss_fft_cpx[samples];
 	}
+	//to be removed//
+	for (int i = 0;i < 3;i++) {//fuuuuck das ist unötig hehehehehhehehe
+		rgb[i] = 0;
+		havg[i] = 1;//retina schützen
+		havg2[i] = 0;
+	}
+    //
 }
 
 
@@ -49,6 +56,12 @@ snippet::~snippet()
 			delete sdata[i];
 		}
 		delete sdata;
+	}
+	if (freq != NULL) {
+		for (int i = 0;i < format->Format.nChannels;i++) {
+			delete freq[i];
+		}
+		delete freq;
 	}
 }
 
@@ -99,6 +112,7 @@ void snippet::transform()
 	for (int g = 0;g < format->Format.nChannels;g++) {
 		kiss_fft(config, sdata[g], freq[g]);
 	}
+	kiss_fft_free(config);
 }
 
 void flM(float inV,float* out,float fNum) {
@@ -123,15 +137,15 @@ void snippet::getCol1(int* out,int* ind)
 	num[2]=fSum(freq[0]+f2,(samples/2)-f2)/((samples/2)-f2);
 
 	for (int i = 0;i < 3;i++) {
-		flM(num[i], &havg[i], 0.01);
+		flM(num[i], &havg[i], 0.001);
 		
 		float s = pow(havg[i] - num[i], 2);
 		flM(s, &havg2[i], 0.01);
-
-		flM(c[i]*(sqrt(s)/havg[i]),&rgb[i],0.08);
+		if (rgb[i] != rgb[i])rgb[i] = 0;
+		flM(c[i]*(num[i]/havg[i]),&rgb[i],0.08);
 		//flM(c[i] *(sqrt(s)/),&rgb[i],0.1 );
 		if (rgb[i] > 255)rgb[i] = 255;
-		float gpf = 0.7;//geheimer pop-faktor
+		float gpf = 1.6;//geheimer pop-faktor
 		out[i] = (int)(pow((rgb[i]/255.f),gpf)*255);
 	}
 }
