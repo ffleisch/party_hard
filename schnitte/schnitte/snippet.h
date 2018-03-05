@@ -1,10 +1,11 @@
 #pragma once
 
-#ifndef COMMON_INC
 #include "common.h"
-#endif // !COMMON_INC
+
+#include "flAvg.h"
 
 #define SNIPPET_INC
+class hsvModder;
 //vlt rgb config mit kanälen
 class snippet
 {
@@ -16,22 +17,47 @@ public:
 	kiss_fft_cpx** freq;
 	int samples = 0;
 	int bytenum=0;
-	
-	void print();
-	bool add(BYTE* nData,int num);
+	//temp code für farbe
+	/*
+	float g1 = 100;
+	float g2 = 200;
+	double brigh = 128;
+	double gpf = 1;//geheimer pop-faktor
+	double gpf2 = 1;
 
-	void getInts();
-	void reset();
+	hsvModder* mod;
+	*/
+	void print();//infos und inhalt in konsole ausgeben
+	bool add(BYTE* nData,int num);//num samples aus nData an Snippet anfügen
 
-	void transform();
-	void getCol1(int* out,int* ind);
-	void getCol2(int* out,int* ind);
-	float havg[3];
-	float havg2[3];
-	float rgb[3];
+	void getInts();//wandelt Arrays von bytes zu kiss_fft_cpx
+	void reset();//setzt snippet zurpck, neue datan werden am anfagng geschrieben
+
+	void transform();//führt fft an sdata aus 
 
 
-	snippet(int minSize, WAVEFORMATEXTENSIBLE* wformat);
-	~snippet();
+
+	//temp code für farbe
+	//void getCol1(int* out,int* ind,int* avgs);
+	//void getCol2(int* out, int* ind);
+	//void getCol3(int* out,int* ind);
+
+	//flAvg* avg;
+	//flAvg* sqE;
+	//flAvg* rgb;
+	//flAvg* outV;
+
+
+	snippet(int minSize, WAVEFORMATEXTENSIBLE* wformat);// erzeugt snippet welches minSize samples enthalten kann im geg format
+	~snippet();//destuctor
 };
+/*
+class hsvModder{
+public:
+	double pfs[3];
+	double mult[3];
+	double addi[3];
+	void mod(int* col);
+	hsvModder(double * pf, double * mul, double * additon);
 
+};*/

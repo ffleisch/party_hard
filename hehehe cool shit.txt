@@ -34,4 +34,4 @@ arduino:
 lights:
 	-still open
 	-meanwell  ldd h buck driver
-	-ldd 3 driver boar
+	-ldd 3 driver board

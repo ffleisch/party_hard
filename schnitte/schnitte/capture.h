@@ -20,13 +20,14 @@ public:
 	int snippetSize = 100;
 
 
-	void dumpBuffer();
-	void getSnippet(snippet* out);
-	void printFotmat();
+	void dumpBuffer();//inhalt des buffers entleeren, nutzlos
+	void getSnippet(snippet* out);//gegebenes snippet mit samples füllen
+	void printFotmat();//infos in konsole ausgeben
 
 
 	capture();
 	~capture();
 };
 
+//standard Audioausgabe-gerät finden 
 HRESULT get_default_device(IMMDevice **ppMMDevice);

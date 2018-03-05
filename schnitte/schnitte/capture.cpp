@@ -108,13 +108,19 @@ capture::capture()
 	if (FAILED(erg)) {
 		printf("IAudioClient::GetMixFormat failed: hr = 0x%08x", erg);
 	}
-
+	REFERENCE_TIME hnsRequestedDuration = 10000000;
+	
 	erg = client->Initialize(
 		AUDCLNT_SHAREMODE_SHARED,
 		AUDCLNT_STREAMFLAGS_LOOPBACK,
 		0, 0, format, 0
 	);
 
+	/*erg = client->Initialize(
+		AUDCLNT_SHAREMODE_SHARED,
+		0,
+		hnsRequestedDuration, 0, format, 0
+	);*///does not work
 	erg = client->GetService(
 		__uuidof(IAudioCaptureClient),
 		(void**)&cclient
