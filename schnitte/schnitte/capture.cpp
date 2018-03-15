@@ -70,6 +70,7 @@ void capture::getSnippet(snippet * out)
 	if (FAILED(erg)) {
 		printf("client couldnt stop 0x%08x\n", erg);
 	}
+	out->getInts();
 }
 
 void capture::printFotmat()
@@ -146,7 +147,7 @@ capture::~capture()
 
 
 //ausgeliehen von loopback capture example
-HRESULT get_default_device(IMMDevice **ppMMDevice) {
+HRESULT capture::get_default_device(IMMDevice **ppMMDevice) {
 	HRESULT hr = S_OK;
 	IMMDeviceEnumerator *pMMDeviceEnumerator;
 

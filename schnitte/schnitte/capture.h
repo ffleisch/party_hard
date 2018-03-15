@@ -24,10 +24,9 @@ public:
 	void getSnippet(snippet* out);//gegebenes snippet mit samples füllen
 	void printFotmat();//infos in konsole ausgeben
 
-
+	HRESULT get_default_device(IMMDevice **ppMMDevice);
 	capture();
 	~capture();
 };
 
 //standard Audioausgabe-gerät finden 
-HRESULT get_default_device(IMMDevice **ppMMDevice);

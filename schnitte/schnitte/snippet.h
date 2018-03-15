@@ -1,10 +1,12 @@
 #pragma once
 
+#ifndef SNIPPET_H
+#define SNIPPET_H
+
 #include "common.h"
 
 #include "flAvg.h"
 
-#define SNIPPET_INC
 class hsvModder;
 //vlt rgb config mit kanälen
 class snippet
@@ -17,6 +19,7 @@ public:
 	kiss_fft_cpx** freq;
 	int samples = 0;
 	int bytenum=0;
+	long resetnum = 0;
 	//temp code für farbe
 	/*
 	float g1 = 100;
@@ -51,13 +54,5 @@ public:
 	snippet(int minSize, WAVEFORMATEXTENSIBLE* wformat);// erzeugt snippet welches minSize samples enthalten kann im geg format
 	~snippet();//destuctor
 };
-/*
-class hsvModder{
-public:
-	double pfs[3];
-	double mult[3];
-	double addi[3];
-	void mod(int* col);
-	hsvModder(double * pf, double * mul, double * additon);
 
-};*/
+#endif

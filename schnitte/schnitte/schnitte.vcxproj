@@ -152,8 +152,11 @@
   <ItemGroup>
     <ClInclude Include="arduinoSender.h" />
     <ClInclude Include="capture.h" />
+    <ClInclude Include="capturePar.h" />
+    <ClInclude Include="ColCalc.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="flAvg.h" />
+    <ClInclude Include="hsvModder.h" />
     <ClInclude Include="kiss_fft130\kissfft.hh" />
     <ClInclude Include="kiss_fft130\kiss_fft.h" />
     <ClInclude Include="kiss_fft130\_kiss_fft_guts.h" />
@@ -165,7 +168,10 @@
   <ItemGroup>
     <ClCompile Include="arduinoSender.cpp" />
     <ClCompile Include="capture.cpp" />
+    <ClCompile Include="capturePar.cpp" />
+    <ClCompile Include="ColCalc.cpp" />
     <ClCompile Include="flAvg.cpp" />
+    <ClCompile Include="hsvModder.cpp" />
     <ClCompile Include="kiss_fft130\kiss_fft.c" />
     <ClCompile Include="schnitte.cpp" />
     <ClCompile Include="SerialPort.cpp" />

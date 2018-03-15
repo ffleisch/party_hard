@@ -16,7 +16,11 @@ flAvg::flAvg(int num, double filter,double init)
 void flAvg::add(double * inp)
 {
 	for (int i = 0;i < len;i++) {
-		val[i] = inp[i]*fv+val[i]*(1-fv);
+		//if (!(ignZero&& (val[i]!=0))){
+			val[i] = inp[i] * fv + val[i] * (1 - fv);
+		//}
+
+		
 		if (val[i] != val[i]) {
 			val[i] = 0;
 		}

@@ -10,6 +10,7 @@ public:
 	int len = 1;
 	double* val;
 	double fv = 0.5;
+	boolean ignZero = false;
 	flAvg(int num,double filter,double init=0);
 	void add(double* inp);
 	~flAvg();
