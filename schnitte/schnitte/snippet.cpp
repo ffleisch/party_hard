@@ -121,6 +121,15 @@ bool snippet::add(BYTE* nData, int num)
 	return false;
 }
 
+void snippet::addZeroes(int num) {
+	for (int i = 0; i < num; i++) {
+		if ((end - data) / sizeof(BYTE)<bytenum) {
+			*end = 0;
+			end++;
+		}
+	}
+}
+
 void snippet::getInts()
 {
 	for (int g = 0;g < format->Format.nChannels;g++) {

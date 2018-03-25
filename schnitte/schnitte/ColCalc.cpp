@@ -170,8 +170,8 @@ void ColCalcHSV::CalcRGB(int * out)
 	h = speed*(cent/cenAvg->val[0])*360;
 	while (h >= 360) { h -= 360; }
 	while (h < 0) { h += 360; }
-	v = av / (tAvg->val[0]*2);
-	v = pow(v,brigh)*valMul;
+	v = (float)av / (tAvg->val[0]*2);
+	v = (float)pow(v,brigh)*valMul;
 	HSVtoRGB(r,g,b,h,s,v);
 	rgb[0] = r;
 	rgb[1] = g;

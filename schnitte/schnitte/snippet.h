@@ -31,7 +31,9 @@ public:
 	hsvModder* mod;
 	*/
 	void print();//infos und inhalt in konsole ausgeben
-	bool add(BYTE* nData,int num);//num samples aus nData an Snippet anfügen
+	bool add(BYTE* nData,int num);
+	void addZeroes(int num);
+	//num samples aus nData an Snippet anfügen
 
 	void getInts();//wandelt Arrays von bytes zu kiss_fft_cpx
 	void reset();//setzt snippet zurpck, neue datan werden am anfagng geschrieben

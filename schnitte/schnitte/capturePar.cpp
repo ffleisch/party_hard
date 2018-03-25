@@ -2,10 +2,7 @@
 
 
 
-capturePar::capturePar()
-{
-
-
+capturePar::capturePar(){
 
 	HRESULT erg;
 
@@ -54,6 +51,9 @@ capturePar::capturePar()
 	if (FAILED(erg)) {
 		printf("IAudioClient::GetService(IAudioCaptureClient) failed: hr = 0x%08x", erg);
 	}
+
+	data = new samChain(format);
+
 	//client->Start();
 
 	//captureThread = std::thread(this.fillList);
@@ -61,16 +61,76 @@ capturePar::capturePar()
 }
 
 
+void samChain::add(BYTE * inp, int num)
+{
+	while (isReading&&!isWriting);
+	isWriting = true;
+	len += num;
+
+	for (int i = 0; i < num; i++) {
+		sam zw;
+		zw.val = new BYTE[format->nBlockAlign];
+		for (int l = 0; l < format->nBlockAlign;l++) {
+			zw.val[l]=inp[format->nBlockAlign*i+l];
+		}
+		raw.push_front(zw);
+	}
+	while (raw.size() > maxLen) {
+		raw.pop_back();
+	}
+	isWriting = false;
+}
+
+void samChain::fillSnippet(snippet * out)
+{
+	out->reset();
+
+	while (isWriting&&!isReading);
+	isReading = true;
+
+	maxLen = out->samples;
+
+	std::list<sam>::iterator iter=raw.begin();
+	for (int i = 0; i < maxLen; i++)
+	{
+		if (i < raw.size()) {
+			out->add(iter->val,format->nBlockAlign);
+			iter++;
+		}
+		else {
+			out->addZeroes(format->nBlockAlign);
+			printf("Buffer to small!\n");
+		}
+	}
+
+
+	isReading = false;
+}
+samChain::samChain(WAVEFORMATEX* f){
+	format = f;
+}
+
+samChain::~samChain()
+{
+	
+}
+
 capturePar::~capturePar()
 {
 	cclient->Release();
 	client->Release();
 	device->Release();
 	CoUninitialize();
+	delete data;
 }
 
 
-const void capturePar::fillList()
+void capturePar::getSnippet(snippet * out)
+{
+	data->fillSnippet(out);
+}
+
+void capturePar::fillList()
 {
 
 	HRESULT erg = 0;
@@ -86,10 +146,10 @@ const void capturePar::fillList()
 	unsigned int pad = 0;
 
 	while (run) {
-		while (readingL) {
+		//while (readingL) {
 
-		}
-		writingL = true;
+		//}
+		//writingL = true;
 		cclient->GetNextPacketSize(&s);
 		unsigned int num = s;
 
@@ -97,17 +157,22 @@ const void capturePar::fillList()
 
 		cclient->GetBuffer(&t, &num, &bflags, NULL, NULL);
 		cclient->ReleaseBuffer(num);
-		for (int i = 0; i < num; i++) {
-			byteList.push_front(t[i]);
-			if (byteList.size() > byteNum) {
-				byteList.pop_back();
-			}
-		}
+		
+
+
+		//for (int i = 0; i < num; i++) {
+			//byteList.push_front(t[i]);
+			//if (byteList.size() > byteNum) {
+				//byteList.pop_back();
+			//}
+		//}
+		
 		//if (!(!bflags&AUDCLNT_BUFFERFLAGS_DATA_DISCONTINUITY)) {
 		//printf("disc\n");
 		//}//hehe wichtig
+		
 		//client->GetCurrentPadding(&pad);
-		writingL = false;
+		//writingL = false;
 	}
 	erg = client->Stop();
 	//printf("total:%d\n", total);
@@ -115,7 +180,7 @@ const void capturePar::fillList()
 		printf("client couldnt stop 0x%08x\n", erg);
 	}
 }
-
+/*
 void capturePar::getSnippet(snippet * out)
 {
 	while (writingL) {
@@ -136,13 +201,13 @@ void capturePar::getSnippet(snippet * out)
 	}
 	out->getInts();
 	readingL = false;
-}
+}*/
 
 void capturePar::printFormat()
 {
 	printf("Samples per second %d\n", format->nSamplesPerSec);
 	printf("Channels: %d\n", format->nChannels);
-	printf("Bytes per Frame %d\n", format->nBlockAlign);
+	printf("Bytes per Sample %d\n", format->nBlockAlign);
 
 }
 

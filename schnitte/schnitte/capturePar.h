@@ -1,15 +1,45 @@
 #pragma once
 
+#ifndef CAPTUREPAR_H
+#define CAPTUREPAR_H
+
+#ifndef COMMON_INC
 #include "common.h"
+#endif
+
+#ifndef SNIPPET_INC
 #include "snippet.h"
+#endif
 
 #ifndef THREAD_H
 #define THREAD_H
 #include <thread>
 #endif // !THREAD_H
 
-#ifndef CAPTUREPAR_H
-#define CAPTUREPAR_H
+
+//enthält genau ein Sample
+struct sam {
+	byte* val;
+};
+
+
+//verwaltet eine Liste von type sam
+class samChain{
+public:
+	WAVEFORMATEX * format;
+	int len;
+	int maxLen=1;
+	void add(BYTE* inp,int num);
+	void fillSnippet(snippet* out);
+	bool isReading=false;
+	bool isWriting=false;
+	std::list<sam> raw;
+	samChain(WAVEFORMATEX* f);
+	~samChain();
+
+private:
+
+};
 
 
 class capturePar
@@ -23,15 +53,16 @@ public:
 	
 	std::thread captureThread;
 
-	std::list<BYTE> byteList;
+	samChain* data;
+
 	int byteNum = 0;
+
 	boolean run = true;
-	boolean readingL;
-	boolean writingL;
 
 	void printFormat();//infos in konsole ausgeben
+	//void getSnippet(snippet* out);//gegebenes snippet mit samples füllen
 	void getSnippet(snippet* out);//gegebenes snippet mit samples füllen
-	const void fillList();
+	void fillList();
 
 	HRESULT get_default_device(IMMDevice **ppMMDevice);
 

@@ -1,35 +1,49 @@
 #include <FastLED.h>
 
-int redPin=9;
-int greenPin=10;
-int bluePin=11;
-int count=0;S
-double s=2;
-int col[3];
+//pins für große LED
+#define REDPIN 9
+#define GREENPIN 10
+#define BLUEPIN 11
 
-char msg[100];
+//pins für knöpfe
+#define B1PIN 2
+#define B2PIN 3
 
-#define DATA_PIN 13
-#define NUM_LEDS 19
+CRGB col;
 
-CRGB leds[NUM_LEDS];
+//char msg[100];
 
-CRGB stripCol;
+//#define DATA_PIN 13
+//#define NUM_LEDS 19
+
+
+volatile byte mode=1;//aktueller modus
+const byte modeMax=5;//anzahl verschiedener modi
+
 
 void setup(){
-  col[0]=0;
-  col[1]=20;
-  col[2]=0;
-  pinMode(redPin,OUTPUT);
-  pinMode(greenPin,OUTPUT);
-  pinMode(bluePin,OUTPUT);
+
+  pinMode(REDPIN,OUTPUT);
+  pinMode(GREENPIN,OUTPUT);
+  pinMode(BLUEPIN,OUTPUT);
+
+  pinMode(B1PIN,INPUT);
+  
   Serial.begin(38400);
-  stripCol=CRGB::Green;
+  col=CRGB::Gold;
+
+  attachInterrupt(digitalPinToInterrupt(B1PIN),b1Press,RISING);
+
   // put your setup code here, to run once:
-  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds,NUM_LEDS);
+  //FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds,NUM_LEDS);
 }
 
-void readRGBInt(int* inp){
+void b1Press(){
+  mode=(mode+1)%modeMax;
+}
+
+
+void readRGBInt(CRGB* inp){
    long start=millis();
    bool found=false;
    int b;
@@ -37,9 +51,9 @@ void readRGBInt(int* inp){
      b=Serial.read();
      if(b=='R'){
         delay((1000/38400)*10);
-       inp[0]=Serial.parseInt();
-       inp[1]=Serial.parseInt();
-       inp[2]=Serial.parseInt();
+       inp->r=Serial.parseInt();
+       inp->g=Serial.parseInt();
+       inp->b=Serial.parseInt();
        found=true;
        
        //break;
@@ -50,24 +64,46 @@ void readRGBInt(int* inp){
    //Serial.print(msg);
 }
 
+void hsvRotate(CRGB* inp){
+  inp->setHue((millis()/500)%255);
+}
+
+void hsvPerlin(CRGB* inp){
+    const double tc=10000;
+    int data=floor((millis()/tc)*255);
+    int per=inoise8(data);
+    //int per=0;
+    per+=(int)((millis()/tc)*255*0.4)%255;
+    while(per>255)per-=255;
+    while(per<0)per+=255;
+    
+    inp->setHue(per);  
+}
+
+void setLight(CRGB* inp){
+  analogWrite(REDPIN,inp->r);
+  analogWrite(GREENPIN,inp->g);
+  analogWrite(BLUEPIN,inp->b);
+}
+
 void loop(){
-  count++;
-  readRGBInt(col);
-
-  analogWrite(redPin,col[0]);
-  analogWrite(greenPin,col[1]);
-  analogWrite(bluePin,col[2]);
-
-  stripCol.setRGB(col[0],col[1],col[2]);  
-  for(int i=0;i<15;i++){
-    leds[NUM_LEDS-i-1]=stripCol;
+  switch(mode){
+    case 0:
+      readRGBInt(&col);
+      break;
+    case 1:
+      hsvRotate(&col);
+      break;
+    case 2:
+      hsvPerlin(&col);
+      break;
+    case 3:
+      col.setRGB(0,255,0);
+      break;
+    case 4:
+      col.setRGB(0,0,255);
+      break;
   }
-
-  FastLED.show();
-  
-
-  //analogWrite(redPin,abs((int)(s*count+1)%511-255));
-  //analogWrite(greenPin,abs((int)(s*count+170)%511-255));
-  //analogWrite(bluePin,abs((int)(s*count+340)%511-255));
+  setLight(&col);
 }
 
