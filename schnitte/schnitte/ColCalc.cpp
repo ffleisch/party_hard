@@ -89,6 +89,7 @@ void ColCalcBounds::CalcRGB(int * out)
 	num[0] = fSum(source->freq[0], f1) / (f1);
 	num[1] = fSum(source->freq[0] + f1, f2 - f1) / (f2 - f1);
 	num[2] = fSum(source->freq[0] + f2, (source->samples / 2) - f2) / ((source->samples / 2) - f2);
+	//printf("%f\n ",num[0]);
 	avg->add(num);
 	double zw[3];
 	double zw2[3];
